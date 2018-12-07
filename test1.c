@@ -5,8 +5,8 @@
 
 struct students{
   int snumber;
-  char *name[30];
-  char *addr[30];
+  char name[30];
+  char addr[30];
   int age;
   float score;
 };
@@ -26,14 +26,15 @@ int main(void)
 void getinfo(struct students *st, int n)
 {
   int i;
+
   for(i=0;i<N;i++)
   {
     printf("type %d's student number : ",i+1);
     scanf("%d",&st[i].snumber);
     printf("type %d's student name : ",i+1);
-    scanf("%s",*(*st[i].name));
+    scanf("%s",st[i].name);
     printf("type %d's student addr : ",i+1);
-    scanf("%s",*(*st[i].addr));
+    scanf("%s",st[i].addr);
     printf("type %d's studnet age : ",i+1);
     scanf("%d",&st[i].age);
     printf("type %d's student score : ",i+1);
