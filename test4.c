@@ -13,7 +13,8 @@ int main(void)
   scanf("%d",&y);
   *ptr2=h*y;
   int arr[*ptr2];
-  / * down is insert and print for ptr */
+  /* down is insert and print for ptr */
+  
   int **ptr=(int**)malloc(sizeof(int*)*h);
   for(i=0;i<h;i++)
   {
@@ -36,7 +37,7 @@ int main(void)
     printf("\n");
   }
   
-/ * down is insert and print for arr and ptr2 */
+/* down is insert and print for arr and ptr2 */
 for(i=0;i<(h*y);i++)
 {
   printf("type arr[%d]: ",i);
