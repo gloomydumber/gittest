@@ -74,13 +74,15 @@ struct students{
 
 void getinfo(struct students *st, int n);
 void printinfo(struct students *st, int n);
-
+void avgage(struct students *st, int n);
+  
 int main(void)
 {
   int n =N;
   struct students st[N];
   getinfo(st, n);
   printinfo(st, n);
+  avgage(st, n);
   return 0;
 }
 
@@ -124,3 +126,15 @@ void printinfo(struct students *st, int n)
 }
 // 평균나이
 // 평균학점
+
+void avgage(struct students *st, int n)
+{
+  float total=0;
+  int i;
+  for(i=0;i<N;i++)
+  {
+    total+=st[i].age;
+    printf("%f\n",total);
+  }
+  printf("%0.2f is average age.\n",total/N);
+}
