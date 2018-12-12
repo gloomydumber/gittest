@@ -138,3 +138,5 @@ void avgage(struct students *st, int n)
   }
   printf("%0.2f is average age.\n",total/N);
 }
+
+// http://blog.naver.com/PostView.nhn?blogId=vovheas104&logNo=220570722880&parentCategoryNo=&categoryNo=23&viewDate=&isShowPopularPosts=true&from=search
