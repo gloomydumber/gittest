@@ -190,12 +190,12 @@ him = &barney;
 
 ■ 	structure의 이름이 structure의 address가 아니다; & operator를 사용하는 것이 필요하다
 ■ 	fellow가 array of structures라면
-him = &fellow[0];
+him = &fellow[0]; <-------------------------------------------------------------------------------------------------------------
 ● 	fellow는 array of structures이므로, fellow[0]는  structure이다
 ■ 	him이 point to fellow[0]을 가리키도록 초기화한다
 ■ 	him points to fellow[0]
 ● 	him은 배열에 대한 pointer이다
-■ 	him + 1 points to fellow[1]
+■ 	him + 1 points to fellow[1] <---------------------------------------------------------------------------------------------------
 
 struct guy *him;
 struct guy p;
