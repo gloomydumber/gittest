@@ -1,0 +1,319 @@
+11장 - STRING
+CODE영역
+DATA영역 - global value / 데이터(문자열[static storage class, static memory에 할당)
+STACK영역 - local value / 배열, 포인터변수
+HEAP영역 - malloc으로 동적할당
+char words[MAXLENGTH] = "I am a string in an array.";
+words[8] = 'p'; -> 바람직하지 않음 const words[]로 정의
+printf("%s, %p, %c\n", "We", "are", *"space farers");
+->space farers 의 제일 첫 글자만 출력
+포인터는 변수이지만 배열은 상수.
+char heart[] = "I love Tillie!";
+const char *head = "I love Millie!";   
+heart = head (x), head = heart (o)
+#define MSG "I'm special"
+
+#include <stdio.h>
+int main()
+{
+	char ar[] = MSG;
+	const char *pt = MSG;
+	printf("address of \"I'm special\": %p \n", "I'm special");
+	printf("              address ar: %p\n", ar);
+	printf("              address pt: %p\n", pt);
+	printf("          address of MSG: %p\n", MSG);
+	printf("address of \"I'm special\": %p \n", "I'm special");
+	getchar();
+	return 0;
+}
+배열만 주소값 다름
+
+char*p1="klingon";
+p1[0]='F'; <- 코드 오류, 컴파일 오류
+-> const를 붙여서 const char *p1 으로 정의하던지, 배열로 문자열 구성.
+
+int *p;
+*p=10; (X)<- 문제 : 포인터가 가르키는 곳이 없음.
+int q=10;
+int *p=&q; (O)
+
+int *p와 int *p=q; 의 차이 :포인터가 가르킬 곳이 없음 / q의 주소를 p에 저장
+
+APPLE\0\0
+PEAR\0\0\0
+ORANGE\0
+char fruit1[3][7]={"APPLE","PEAR","ORANGE"};
+
+APPLE\0
+PEAR\0
+ORANGE\0
+const char *fruit2[3]={"APPLE","PEAR","ORANGE"};
+
+
+
+
+
+
+
+
+
+	const char * mesg = "Don't be a fool!";
+	const char * copy;
+
+	copy = mesg;//copy of address
+	printf("%s\n", copy);
+	printf("mesg = %s; &mesg = %p; value = %p\n",
+	mesg, &mesg, mesg);
+	printf("copy = %s; &copy = %p; value = %p\n",
+	copy, &copy, copy);
+
+&mesg와 &copy만 다른 주소, 다 같음.
+
+12장-STORAGE CLASS
+
+linkage
+main.c -> main.o
+sort.c -> sort.o  두 개를 linking -> 하나의 실행파일 만듦
+
+int y; <- file scope variable(=global variable)
+int main(void)
+{
+int n; <- local variable
+}
+다른 파일끼리 연결하는 것 = external linkage
+
+static - https://dojang.io/mod/page/view.php?id=690
+ 
+정적 변수(전역, 지역)는 프로그램이 시작될 때 생성 및 초기화되고 프로그램이 끝날 때 사라집니다
+정적 변수는 함수의 매개변수로 사용할 수 없습니다.
+static으로 선언한 변수를 extern으로 사용하려고 하면 컴파일(링크) 에러가 발생합니다. 즉, 정적 전역 변수는 자신이 선언된 소스 파일 안에서만 사용할 수 있고, 외부에서는 가져다 쓸 수 없습니다. 즉, 전역 변수에 static을 붙이면 변수의 범위를 파일 범위로 제한하는 효과를 냅니다.
+“file scope” 의미 : “file scope with internal linkage” 
+“global scope” or “program scope” 의미 :“file scope with external linkage.”
+
+int giants = 5;          // file scope, external linkage 
+static int dodgers = 3;  // file scope, internal linkage
+int main()
+{      ...
+}                    // giants는 external linkage로 쓰일 수 있으나, static이 붙은 전역변수 dodger는 inernal linkage로만 쓰임. 선언된 소스 파일안에서만 사용.
+
+STORAGE DURATION 4가지
+ static storage duration : 프로그램 실행-종료 까지 존재하는 변수, file scope의 변수, data영역에 저장
+(단 키워드인 static은 linkage type을 말하는 것, storage duration을 의미하진 않음)
+ thread storage duration : thread가 끝날 때 까지 존재
+ automatic storage duration : block scope의 변수, 블락이 끝날 때 까지 존재
+ allocated storage duration 
+
+
+
+static int stay; // -> stay는 data영역에있음.
+
+int units=0; // global variable 의 def.
+int main(void)
+{
+extern int units; // global variable의 declartaion (생략가능, 명확히 함)
+}
+
+int main(void)  {    auto int plox;   }
+auto생략가능
+
+#include <stdio.h>
+//file scope, external linkage, static storage duration
+extern int count;       // reference declaration, external linkage, static storage duration, defining declaration이라 한다
+// file scope variable
+static int total = 0;   // static definition, internal linkage, static storage duration
+void accumulate(int k); // prototype
+
+void accumulate(int k)  // k has block scope, no linkage
+{
+	static int subtotal = 0;  // static storage duration, no linkage, block scope
+
+	if (k <= 0)
+...
+
+위 static : global variable(data영역), internal linkage
+아래 static : local variable(data영역), no linkage, block scope(=함수 내에서만 효과)
+
+int Errupt;           /* externally defined variable    */
+double Up[100];       /* externally defined array       */  
+extern char Coal;     /* mandatory declaration if       */                        			/* Coal defined in another file   */  
+void next(void);  
+int main(void)  {    
+extern int Errupt;  /* optional declaration           */      
+extern double Up[]; /* optional declaration           */    ... 
+
+local 변수는 stack에 저장, static qusstn는 data에 저장하지만 local variable일 수 있음.
+
+extern : 변수 뿐만아니라 함수에도 씀
+static은 data영역에 할당되고, 고정.
+stack, heap영역은 자유로움
+malloc은 이름 없고 주소만 줌, 포인터 TJdigka, generic pointer 사용, type cast 해야함 (pointer to void)
+
+14장 struct
+
+struct book b[3];
+
+title author value <- field(attribute)
+ Clang KIM     3   <- record
+ JAVA  HONG    2
+ Python JUNG   4
+
+struct (book){ <- book은 struct의 이름. 생략 가능하다. 임의로 잡아줌.
+...
+...
+...
+} library; <- library가 변수
+
+struction declartion은 struct에 같이 표현 할 변수들을 기술하는 것
+스트럭쳐 선언을 template라 함. data를 어떻게 저장할 것인지 outline을 잡기 때문 임.
+data를 위한 메모리 할당은 아님.
+
+	struct book library = {
+	"The Pious Pirate and the Devious Damsel",
+	"Renee Vivotte", 
+	1.95
+	};
+로 초기화 
+
+- 	structure의 개별 member를 접근하는 방법
+■ 	dot(.)를 사용, structure member operator라고 부름
+ 
+	s_gets(library.title, MAXTITL);   
+	scanf("%f", &library.value);
+
+
+*him.income에서 .가 우선순위이기 때문에, (*him).income 또는 him->income으로씀
+struct guy * him;
+- 	이러한 선언은 new structure를 만들지 않는다
+■ 	pointer him 은 guy type의 어떤 structure도 point할 수 있다
+■ 	barney가 guy type의 structure라면
+him = &barney;
+
+■ 	structure의 이름이 structure의 address가 아니다; & operator를 사용하는 것이 필요하다
+■ 	fellow가 array of structures라면
+him = &fellow[0];
+● 	fellow는 array of structures이므로, fellow[0]는  structure이다
+■ 	him이 point to fellow[0]을 가리키도록 초기화한다
+■ 	him points to fellow[0]
+● 	him은 배열에 대한 pointer이다
+■ 	him + 1 points to fellow[1]
+
+struct guy *him;
+struct guy p;
+
+차이 : p는 메모리 할당 하지만, him은 참조만 함.(him=&p, him은 p의 주소를 갖는 포인터)
+
+struct .이름. <- 까지를 하나의 type으로 봄.
+
+char name[40]; scanf("%s",name); / O
+char *name; scanf("%s",name); /X, error
+차이 : 포인터가 가르키는 곳이 없기 때문에 에러.
+
+struct names{
+char first[LEN];
+char last[LEN];
+};
+struct pnames{
+char *first;
+char *last;
+};
+struct pnames treas={"brad","fallingjaw"}; -> 가능
+struct pnames t;
+t.first="hong"; <- error, visual studio 버전에 따라 다름. string이기 때문에 code영역,data영역에 있는데 가리키는 곳이 없었음(uninitialized)
+scanf("%s",t.first); <- 100프로 에러
+
+(struct를 정의한 곳에서 메모리 할당하는 것이 아니라, 변수로 선언할 때 메모리 할당한다고 생각하면 됨.)
+
+union holds
+{ int digit;
+double bigfli;
+char letar;
+} -> 가장 큰 double(8바이트)로 할당.
+
+변수선언방법 :
+union holds H; // holds는 tag, H는 변수, 할당은 최대길이(8바이트)로 할당
+
+enum spectrm{red,orange,yellow,...);
+               0    1     2   .... 숫자취급
+
+
+
+enum spect a
+struct names c
+union hold h
+(         ) <- type부분
+      (   ) <- TAG 부분
+            () <- 변수부분
+
+이 세 개는 name space를 공유하기 때문에,
+struct tag y;로 선언한 경우. union tag y; 하면 error남.
+근데 int tag;는 허용됨.
+
+namespace
+using name space N;
+
+#include <stdio.h>
+namespace N {int a; int b;}
+namespace M {int a; int c;}
+using namespace N;
+int main() {
+	char *name = "hong";
+	int m = N::a;
+	//*name = "a";
+
+typedef -> compier가 해석 하는 것임. pre-processor가 해석하는 것 아님.
+#define -> pre-processor(전처리기)가 바꿔치기 함.
+
+typedef는 type에 대한 symbolic name 부여함.
+
+typedef의 효력범위.
+function 내에 존재 : function 내 효력
+function 외 존재 : global
+
+14.11 Fancy Declarations
+
+int board[8][8]; // an array of arrays of int
+int ** ptr; // a pointer to a pointer to int
+int * risks[10]; // a 10-element array of pointers to int
+int (* rusks)[10]; // a pointer to an array of 10 ints
+int * oof[3][4]; // a 3 x 4 array of pointers to int
+int (* uuf)[3][4]; // a pointer to a 3 x 4 array of ints
+int (* uof[3])[4]; // a 3-element array of pointers to 4-element arrays of int
+
+- 	modifiers를 적용하는 순서를 이해하는 것이 필요하다
+1. 	[]: array 표현, (): function 표현 – 같은 precedence은 갖는다
+i. 	i.[], () precedence은 * indirection operator보다 더 높다
+ii. 	ii.int * risks[10];
+
+2. 	[], ():  associate from left to right.
+i. 	i.array of 12 arrays of 50 int s,
+1. 	not an array of 50 arrays of 12 int s:
+ii. 	ii.int goods[12][50];
+3. 	[], ()은 같은 precedence를 갖는다 그리고 associate from left to right
+A. 	()를 먼저 적용한 후에 [] 적용
+
+int (* rusks)[10];
+makes rusks a pointer to an array of 10 int s:
+
+int * oof[3][4];
+- 	[3] has higher precedence than the *
+- 	[3]이 [4]보다 먼저 적용
+- 	oof is a three-element array of four-element arrays of pointers to int , or, for short, a 3×4 array of pointers to int .
+
+
+int (* uuf)[3][4];
+
+
+char * fump(int); // function returning pointer to char
+char (* frump)(int); // pointer to a function that returns type char
+char (* flump[3])(int);// array of 3 pointers to functions that return type char
+
+typdef int arr5[5];
+typedef arr5 * p_arr5;
+typedef p_arr5 arrp10[10];
+arr5 togs; // togs an array of 5 int
+p_arr5 p2; // p2 a pointer to an array of 5 int
+arrp10 ap; // ap an array of 10 pointers to array-of-5-int
+
+(), []는 같은 presidence
+int (*f)[3][4];
+   먼저 후 ->
